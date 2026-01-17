@@ -10,7 +10,7 @@
 
 ## Overview
 
-DonumAI is an AI-powered educational platform I’ve developed to explore whether artificial intelligence can replace human teachers—especially for scenarios where teachers are not available. The platform leverages AI to deliver lessons, answer questions, and personalize the learning experience for users.
+DonumAI is an AI-powered educational platform I’ve developed to explore whether artificial intelligence can addition human teachers—and also teach for scenarios where teachers are not available. The platform leverages AI to deliver lessons, answer questions, and personalize the learning experience for users.
 
 ***
 
