@@ -44,7 +44,7 @@ The application has no database and no user accounts. The API key is held in a l
 Requirements: Python 3.10 or newer and a Google Gemini API key from [Google AI Studio](https://aistudio.google.com/).
 
 ```bash
-git clone [https://github.com/mkannan2k9/DonumAI.git](https://github.com/mkannan2k9/DonumAI.git)
+git clone https://github.com/mkannan2k9/DonumAI.git
 cd DonumAI
 python -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
