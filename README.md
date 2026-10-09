@@ -77,6 +77,7 @@ DonumAI has no server-side secrets. The only constants live at the top of `flask
 5. Reload the web app.
 
 ## Project structure
+```
 flask_app.py Flask application and Gemini calls
 requirements.txt Python dependencies
 static/
@@ -87,6 +88,7 @@ index.html Lesson form
 serviceman.html Lesson page
 privacy.html Privacy Policy
 terms.html Terms of Use
+```
 
 
 ## Privacy and limitations
