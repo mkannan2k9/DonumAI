@@ -1,98 +1,109 @@
-# README Template for Your Donumai Project
+# DonumAI
 
-## Donumai: Portfolio & Project Showcase
+A free, open-source AI teacher that generates personalised lessons from a student's grade, curriculum, topic and interests. Built with Flask and Google's Gemini API.
 
-**Live Demo:**  
-- Portfolio: [mkannan2k9.github.io/portfolio](https://mkannan2k9.github.io/portfolio/)  
-- Donumai: [donumai.pythonanywhere.com](https://donumai.pythonanywhere.com/)
+Live site: https://donumai.pythonanywhere.com
 
-***
+## Features
 
-## Overview
+- Personalised lessons: grade, curriculum, subject, topic, scope, familiarity level, language and interests all shape the lesson.
+- Teaching styles: Normal, Formal Academic, Informal Conversational, Gen Z and Shakespearean.
+- Bring your own key: users supply their own Google Gemini API key through a masked field.
+- Live model list: a "Load available models" button queries Google for the text models the user's key can use, so no model list is hardcoded.
+- Clearly labelled output: every lesson carries an AI-generated notice.
 
-DonumAI is an AI-powered educational platform I’ve developed to explore whether artificial intelligence can addition human teachers—and also teach for scenarios where teachers are not available. The platform leverages AI to deliver lessons, answer questions, and personalize the learning experience for users.
+## How it works
 
-***
+1. The browser submits the lesson form (and, optionally, a model request) to the Flask app.
+2. The app validates the input, builds a single self-contained prompt and calls Gemini.
+3. The response is converted from Markdown to HTML, sanitised and displayed.
 
-## Tech Stack
+The application has no database and no user accounts. The API key is held in a local variable for the duration of a request and is not written to disk or to the application's logs.
 
-- **Backend:** Flask
-- **Frontend:** HTML, CSS, (optionally Markdown)
-- **Deployment:** PythonAnywhere & GitHub Pages
+### Routes
 
-***
+| Route | Method | Purpose |
+|---|---|---|
+| `/` | GET | Lesson form |
+| `/models` | POST | Lists the Gemini text models available to the supplied key |
+| `/serviceman` | POST | Generates and displays a lesson |
+| `/privacy` | GET | Privacy Policy |
+| `/terms` | GET | Terms of Use |
 
-## Getting Started
+### Design choices
 
-### Prerequisites
+- Current Gemini API: uses the `google-genai` SDK and the Interactions API.
+- No server-side storage of interactions: calls set `store=False`.
+- Input limits: field lengths are capped, and the model ID must match a `gemini-...` pattern.
+- Sanitised output: model output is cleaned with `bleach` before it is shown.
+- Strict security headers: a Content-Security-Policy allows only same-origin assets, and responses are sent with `Cache-Control: no-store`.
+- No third-party assets: no external fonts, icon libraries or scripts.
 
-Create and activate a Python environment. Then install required packages:
+## Getting started
+
+Requirements: Python 3.10 or newer and a Google Gemini API key from [Google AI Studio](https://aistudio.google.com/).
 
 ```bash
+git clone [https://github.com/mkannan2k9/DonumAI.git](https://github.com/mkannan2k9/DonumAI.git)
+cd DonumAI
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
+python flask_app.py
 ```
 
-_The main dependencies (in `requirements.txt`) are:_
+Open http://127.0.0.1:5000, enter your API key, optionally load the available models, fill in the form and generate a lesson.
 
-```
-flask
-google-generativeai
-markdown
-```
+## Configuration
 
-### Run locally
+DonumAI has no server-side secrets. The only constants live at the top of `flask_app.py`:
 
-Clone the repository and run:
+| Setting | Default | Meaning |
+|---|---|---|
+| `DEFAULT_MODEL` | `gemini-3.5-flash-lite` | Model used when none is selected |
+| `EXCLUDED_WORDS` | embedding, tts, image, live, audio, ... | Model IDs containing these words are hidden from the model list |
 
-```bash
-export FLASK_APP=app.py
-flask run
-```
+## Deployment (PythonAnywhere)
 
-Open [localhost:5000](http://localhost:5000) in your browser.
+1. Upload the project and create a virtualenv.
+2. Install the dependencies inside that virtualenv: `pip install -U -r requirements.txt`.
+3. Set the web app's virtualenv path in the **Web** tab.
+4. In the WSGI file, import the app:
 
-***
+   ```python
+   from flask_app import app as application
+   ```
 
-## Folder Structure
+5. Reload the web app.
 
-```
-/project_root
-│
-├── app.py
-├── requirements.txt
-├── static/
-├── templates/
-└── LICENSE
-```
+## Project structure
+flask_app.py Flask application and Gemini calls
+requirements.txt Python dependencies
+static/
+style.css Site styles
+app.js Form helpers and the model loader
+templates/
+index.html Lesson form
+serviceman.html Lesson page
+privacy.html Privacy Policy
+terms.html Terms of Use
 
-***
 
-## Contribution
+## Privacy and limitations
 
-Pull requests are welcome! For major changes, please open an issue first to discuss.
+- Lessons are generated by AI and can be wrong. Please verify anything important.
+- The app is designed to avoid storing user input, but any host or API provider used to run it handles requests under its own terms. See the in-app [Privacy Policy](templates/privacy.html) and [Terms](templates/terms.html).
+- Use a key with a spending limit and rotate it if you have any concerns.
+- Model availability and free-tier quotas are controlled by Google and may change.
 
-***
+## Contributing
+
+Issues and pull requests are welcome. For larger changes, please open an issue first to discuss what you would like to change.
 
 ## License
 
-This project is licensed under the **MIT License**.  
-See the [LICENSE](LICENSE) file for details.  
-(Credit to Kannan Murugapandian.)
-
-***
+Released under the [MIT License](LICENSE).
 
 ## Author
 
-- **Name:** Kannan Murugapandian
-- **Location:** Singapore
-- **Contact:** See portfolio link above
-
-***
-
-## Acknowledgments
-
-- Flask documentation
-- Google Generative AI API guides
-- PythonAnywhere
-
-***
+Created by [Kannan Murugapandian](https://kannan.bearblog.dev).
